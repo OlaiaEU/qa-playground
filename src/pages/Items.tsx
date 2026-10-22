@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 type Item = {
   name: string;
@@ -57,6 +57,7 @@ export default function Items() {
   const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice])
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [discountOnly, setDiscountOnly] = useState(false)
+  const discountRef = useRef<HTMLInputElement>(null)
 
   const toggleType = (type: string) => {
     setSelectedTypes((prev) =>
@@ -68,6 +69,11 @@ export default function Items() {
     setPriceRange([minPrice, maxPrice])
     setSelectedTypes([])
     setDiscountOnly(false)
+  }
+
+  const handleEmptyReset = () => {
+    resetFilters()
+    discountRef.current?.focus()
   }
 
   const filteredItems = itemsData.filter((item) => {
@@ -100,6 +106,7 @@ export default function Items() {
             <input
               style={{ marginLeft: '0px' }}
               name='only-discount'
+              ref={discountRef}
               type="checkbox"
               checked={discountOnly}
               onChange={(e) => setDiscountOnly(e.target.checked)}
@@ -257,6 +264,20 @@ export default function Items() {
               </h3>
             </div>
           ))}
+        </div>
+        <div role="status" aria-live="polite" data-testid="items-status">
+          {filteredItems.length === 0 && (
+            <>
+              <p>No items match the current filters.</p>
+              <button
+                type="button"
+                data-testid="empty-state-reset"
+                onClick={handleEmptyReset}
+              >
+                Reset all filters
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
