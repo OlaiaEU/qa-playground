@@ -152,13 +152,15 @@ export default function Items() {
           </span>
           {types.map((type) => (
             <div key={type}>
-              <input
-                name={'include-'+type.toLowerCase()}
-                type="checkbox"
-                checked={selectedTypes.includes(type)}
-                onChange={() => toggleType(type)}
-              />
-              {type}
+              <label>
+                <input
+                  name={'include-'+type.toLowerCase()}
+                  type="checkbox"
+                  checked={selectedTypes.includes(type)}
+                  onChange={() => toggleType(type)}
+                />
+                {type}
+              </label>
             </div>
           ))}
         </div>
